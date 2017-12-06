@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aggregation</title>
+</head>
+<body>
+<script>
+    var arr = [{
+        type:"a",
+        name:"a",
+        result:[{data1:"aa",data2:"aa"}]
+    },{
+        type:"b",
+        name:"b",
+        result:[{data1:"bb",data2:"bb"}]
+    },{
+        type:"b",
+        name:"b",
+        result:[{data1:"bb2",data2:"bb2"}]
+    },{
+        type:"c",
+        name:"c",
+        result:[{data1:"cc",data2:"cc"}]
+    }];
+    console.log(aggregation(arr,'type','result'));
+    /**
+     * @desc 根据数组对象中的某个键进行分组，并且合并数组对象中某个键对应的值
+     * @param arr 要处理的数组
+     * @param key 作为分组的键
+     * @param key2 作为合并的键
+     * @returns {Array}
+     */
+    function aggregation(arr,key,key2){
+        /*生成以key对arr进行分组的对象*/
+        var obj=arr.reduce(function(prev,curr){
+            if(curr[key] in prev){
+                prev[curr[key]].push(curr);
+            }else{
+                prev[curr[key]]=[curr];
+            }
+            return prev;
+        },{});
+        /*对上面产生的对象中的数据进行合并，并将key2中的数据合并到同一个数组中*/
+        return [].map.call(Object.keys(obj),function(key){
+            return obj[key].reduce(function(prev,curr){
+                [].push.apply(prev[key2],curr[key2]);
+                return prev;
+            });
+        });
+    }
+</script>
+</body>
+</html>
